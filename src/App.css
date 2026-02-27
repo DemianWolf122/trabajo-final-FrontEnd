@@ -1,0 +1,102 @@
+/* Reseteo básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.whatsapp-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    background-color: #eae6df;
+    /* Fondo general simulado */
+}
+
+/* Columna izquierda (Sidebar) */
+.sidebar-section {
+    width: 30%;
+    min-width: 300px;
+    border-right: 1px solid #d1d7db;
+    background-color: #ffffff;
+    overflow-y: auto;
+}
+
+/* Columna derecha (Chat o Home) */
+.chat-section {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- ESTILOS INTERNOS DEL CHAT --- */
+.chat-window {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chat-header {
+    height: 60px;
+    background-color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    border-bottom: 1px solid #d1d7db;
+}
+
+.chat-header .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.chat-messages-area {
+    flex-grow: 1;
+    background-image: url('URL_DE_PATRON_WP');
+    /* Acá podés poner el patroncito de fondo de WP */
+    background-color: #efeae2;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Burbujas de chat */
+.message-bubble {
+    max-width: 60%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.message-bubble.mine {
+    background-color: #d9fdd3;
+    /* Verde clarito tuyo */
+    align-self: flex-end;
+}
+
+.message-bubble.theirs {
+    background-color: #ffffff;
+    /* Blanco del otro */
+    align-self: flex-start;
+}
+
+.chat-input-area {
+    height: 60px;
+    background-color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.chat-input-area input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    margin-right: 10px;
+}
