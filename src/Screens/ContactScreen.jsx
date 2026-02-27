@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { useParams } from 'react-router'
-import { ContactsContext } from '../../Context/ContactsContext'
+// ¡Acá estaba el error! Cambiamos ../../ por ../
+import { ContactsContext } from '../Context/ContactsContext'
 
 export default function ContactScreen() {
     const { contacts } = useContext(ContactsContext)
