@@ -1,10 +1,10 @@
 import React from 'react'
 import { Route, Routes } from 'react-router'
-import HomeScreen from './Screens/HomeScreen'
-import ContactScreen from './Screens/ContactScreen'
-import ErrorNotFoundScreen from './Screens/ErrorNotFoundScreen'
-import ContactSidebar from './Components/ContactSidebar'
-import ContactsContextProvider from './Context/ContactsContext'
+import HomeScreen from './Screens/HomeScreen.jsx'
+import ContactScreen from './Screens/ContactScreen.jsx'
+import ErrorNotFoundScreen from './Screens/ErrorNotFoundScreen.jsx'
+import ContactSidebar from './Components/ContactSidebar.jsx' // Asumiendo que es un archivo directo
+import ContactsContextProvider from './Context/ContactsContext.jsx'
 import './App.css'
 
 function App() {
