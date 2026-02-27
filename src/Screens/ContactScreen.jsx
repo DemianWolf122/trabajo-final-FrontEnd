@@ -9,7 +9,7 @@ export default function ContactScreen() {
     const contact_selected = contacts.find(contact => Number(contact.id) === Number(contact_id))
 
     if (!contact_selected) {
-        return <h2>El contacto seleccionado no existe</h2>
+        return <h2>Contacto seleccionado no disponible</h2>
     }
 
     return (
