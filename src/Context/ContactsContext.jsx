@@ -1,28 +1,35 @@
 import { createContext, useState } from "react";
-// Le agregamos el .js al final para que Vite no llore
 import { getContacts } from "../services/contactsService.js";
 
-export const ContactsContext = createContext(
-    {
-        contacts: [],
-        favorite_name: ''
-    }
-)
+export const ContactsContext = createContext();
 
 const ContactsContextProvider = ({ children }) => {
-    const contacts = getContacts()
-    const [contactsState, setContactsState] = useState(contacts)
+    const [contactsState, setContactsState] = useState(getContacts());
 
-    const provider_values = {
-        contacts: contactsState,
-        favorite_name: 'pepe'
-    }
+    // Función mágica para enviar mensajes
+    const sendMessage = (contactId, text) => {
+        const newMessage = {
+            id: Date.now(), // ID único temporal
+            text: text,
+            send_by_me: true,
+            created_at: new Date().toISOString(),
+            is_read: false
+        };
+
+        setContactsState(prevContacts =>
+            prevContacts.map(contact =>
+                contact.id === Number(contactId)
+                    ? { ...contact, messages: [...contact.messages, newMessage] }
+                    : contact
+            )
+        );
+    };
 
     return (
-        <ContactsContext.Provider value={provider_values}>
+        <ContactsContext.Provider value={{ contacts: contactsState, sendMessage }}>
             {children}
         </ContactsContext.Provider>
-    )
-}
+    );
+};
 
-export default ContactsContextProvider
+export default ContactsContextProvider;

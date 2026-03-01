@@ -304,3 +304,89 @@ body {
     line-height: 20px;
     font-weight: 300;
 }
+
+/* Sobreescribí lo anterior con esto para perfeccionar el look */
+:root {
+    --wp-header: #f0f2f5;
+    --wp-green: #00a884;
+    --wp-bg: #efeae2;
+    --wp-bubble-me: #d9fdd3;
+    --wp-bubble-other: #ffffff;
+}
+
+.whatsapp-container {
+    border-top: none;
+    /* Quitamos el borde tosco anterior */
+    height: 100vh;
+    display: flex;
+    background-color: #eae6df;
+}
+
+/* Sidebar Header (Look real) */
+.sidebar-section::before {
+    content: "";
+    display: block;
+    height: 60px;
+    background-color: var(--wp-header);
+    border-bottom: 1px solid #d1d7db;
+}
+
+.sidebar-section a {
+    height: 72px;
+    border-bottom: 1px solid #f2f2f2;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.sidebar-section a h3 {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+/* Chat perfeccionado */
+.chat-messages-area {
+    background-color: var(--wp-bg);
+    background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
+    padding: 20px 5%;
+}
+
+.message-bubble {
+    padding: 6px 10px 8px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.message-bubble.mine {
+    background-color: var(--wp-bubble-me);
+    align-self: flex-end;
+    box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+}
+
+.message-bubble.theirs {
+    background-color: var(--wp-bubble-other);
+    align-self: flex-start;
+    box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+}
+
+.chat-input-area {
+    background-color: #f0f2f5;
+    padding: 5px 16px;
+    gap: 10px;
+}
+
+.chat-input-area input {
+    border-radius: 8px;
+    height: 42px;
+    background: white;
+}
+
+.chat-input-area button {
+    color: #54656f;
+    transition: color 0.2s;
+}
+
+.chat-input-area button:not(:disabled) {
+    color: var(--wp-green);
+}
