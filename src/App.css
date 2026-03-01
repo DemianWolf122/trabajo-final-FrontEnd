@@ -1,21 +1,26 @@
-/* =========================================
-   ESTILOS GENERALES (RESET & CORE)
-   ========================================= */
+:root {
+    --wp-header: #f0f2f5;
+    --wp-green: #00a884;
+    --wp-bg: #efeae2;
+    --wp-bubble-me: #d9fdd3;
+    --wp-bubble-other: #ffffff;
+    --icon-color: #54656f;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
     height: 100vh;
     overflow: hidden;
     background-color: #eae6df;
-    /* Fondo general de WP */
 }
 
-/* Scrollbars estilo WhatsApp */
+/* Scrollbars */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -30,18 +35,90 @@ body {
 }
 
 /* =========================================
-   LAYOUT PRINCIPAL (App.jsx)
+   PANTALLA DE CARGA ANIMADA
    ========================================= */
-.whatsapp-container {
+.startup-screen {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     height: 100vh;
     width: 100vw;
-    background-color: #fff;
-    /* Efecto de borde superior verde de WP Web */
-    border-top: 10px solid #00a884;
+    background-color: #f0f2f5;
 }
 
-/* Columna Izquierda (Sidebar) */
+.progress-bar-container {
+    width: 400px;
+    height: 3px;
+    background-color: #e9edef;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 50px;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #00a884;
+    width: 0%;
+    animation: load 1.8s ease-out forwards;
+}
+
+@keyframes load {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 100%;
+    }
+}
+
+.encryption-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.encryption-notice p {
+    color: #8696a0;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* =========================================
+   BOTONES E ÍCONOS GLOBALES
+   ========================================= */
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--icon-color);
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background-color: rgba(11, 20, 26, .1);
+}
+
+/* =========================================
+   LAYOUT PRINCIPAL
+   ========================================= */
+.whatsapp-container {
+    height: 100vh;
+    display: flex;
+    background-color: #eae6df;
+}
+
+/* =========================================
+   SIDEBAR & HEADER
+   ========================================= */
 .sidebar-section {
     width: 30%;
     min-width: 340px;
@@ -52,104 +129,142 @@ body {
     background-color: #fff;
 }
 
-/* Columna Derecha (Chat/Home) */
+.sidebar-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sidebar-header {
+    height: 60px;
+    background-color: var(--wp-header);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid #d1d7db;
+}
+
+.my-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    object-fit: cover;
+}
+
+.sidebar-header-icons {
+    display: flex;
+    gap: 5px;
+}
+
+/* Barra de Búsqueda */
+.sidebar-search {
+    padding: 8px 12px;
+    background-color: #fff;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.search-bar {
+    background-color: #f0f2f5;
+    height: 35px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    gap: 15px;
+}
+
+.search-bar input {
+    background: none;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 15px;
+}
+
+/* Lista de Contactos (Estilo Real) */
+.contact-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: #fff;
+}
+
+.contact-link {
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    height: 72px;
+    text-decoration: none;
+    transition: background-color 0.1s;
+    cursor: pointer;
+}
+
+.contact-link:hover {
+    background-color: #f5f6f6;
+}
+
+.contact-link img {
+    width: 49px;
+    height: 49px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.contact-item-info {
+    flex-grow: 1;
+    border-bottom: 1px solid #f2f2f2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-right: 15px;
+}
+
+.contact-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.contact-item-header h3 {
+    font-size: 17px;
+    font-weight: 400;
+    color: #111b21;
+}
+
+.contact-date {
+    font-size: 12px;
+    color: #667781;
+}
+
+.contact-item-preview {
+    font-size: 14px;
+    color: #667781;
+}
+
+/* =========================================
+   PANTALLA DE CHAT
+   ========================================= */
 .chat-section {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     background-color: #f0f2f5;
-    /* Fondo del Home vacío */
 }
 
-/* =========================================
-   ESTILOS SIDEBAR (ContactSidebar.jsx)
-   ========================================= */
-
-/* Estilos para limpiar el HTML actual (h3 y hr) */
-.sidebar-section h2,
-.sidebar-section h3,
-.sidebar-section hr {
-    display: none;
-    /* Ocultamos los títulos y líneas viejas para el diseño WP */
-}
-
-/* Contenedor de la lista de contactos */
-.sidebar-section>div {
-    flex-grow: 1;
-    overflow-y: auto;
-}
-
-/* Cada Contacto (El Link) */
-.sidebar-section a {
-    display: flex;
-    align-items: center;
-    padding: 10px 15px;
-    text-decoration: none;
-    color: #000;
-    border-bottom: 1px solid #f2f2f2;
-    transition: background-color 0.1s ease;
-    height: 72px;
-    /* Altura estándar de contacto en WP */
-}
-
-.sidebar-section a:hover {
-    background-color: #f5f6f6;
-    /* Gris de hover de WP */
-}
-
-/* Avatares Circulares */
-.sidebar-section a img {
-    width: 49px !important;
-    /* Forzamos tamaño WP */
-    height: 49px !important;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 15px;
-}
-
-/* Contenedor de Texto del Contacto */
-.sidebar-section a::after {
-    content: '';
-    /* Usamos pseudo-elemento para forzar el layout de WP con el HTML actual */
-}
-
-/* Nombre del Contacto (Reemplazando el h3 original en el CSS) */
-/* NOTA: Tu HTML actual pone `<h3>{contact.name}</h3>`. Lo estilizamos */
-.sidebar-section a h3 {
-    display: block;
-    /* Lo volvemos a mostrar */
-    font-size: 17px;
-    font-weight: 400;
-    color: #111b21;
-    margin-bottom: 2px;
-}
-
-/* Última conexión (Reemplazando el span) */
-.sidebar-section a span {
-    display: block;
-    font-size: 13px;
-    color: #667781;
-}
-
-/* Ocultamos los br molestos */
-.sidebar-section a br {
-    display: none;
-}
-
-/* =========================================
-   ESTILOS VENTANA CHAT (ContactScreen.jsx)
-   ========================================= */
 .chat-window {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-/* Cabecera del Chat */
 .chat-header {
     height: 60px;
-    background-color: #f0f2f5;
+    background-color: var(--wp-header);
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 0 16px;
     border-bottom: 1px solid #d1d7db;
@@ -158,7 +273,20 @@ body {
     z-index: 100;
 }
 
-.chat-header .avatar {
+.chat-header-info-btn {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 8px;
+    flex-grow: 1;
+}
+
+.chat-header-info-btn:hover {
+    background-color: rgba(11, 20, 26, .05);
+}
+
+.chat-header-info-btn .avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -166,39 +294,38 @@ body {
     object-fit: cover;
 }
 
-.chat-header .contact-info h2 {
+.chat-header-info-btn h2 {
     font-size: 16px;
     font-weight: 500;
     color: #111b21;
+    margin-bottom: 2px;
 }
 
-.chat-header .contact-info span {
+.chat-header-info-btn span {
     font-size: 13px;
     color: #667781;
 }
 
-/* Área de Mensajes (con el patroncito de fondo) */
-.chat-messages-area {
-    flex-grow: 1;
-    background-color: #efeae2;
-    /* Fondo beige de chat */
-    /* Patroncito de WP Web (SVG) */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='412' height='747' viewBox='0 0 412 747'%3E%3Cpath fill='%23ccc' fill-opacity='0.15' d='M0,0H412V747H0Z'/%3E%3Cpath fill='%23fff' fill-opacity='0.2' d='M23,12h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Zm5,0h2v2h-2Z'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    padding: 20px 7%;
-    /* Márgenes WP Web */
+.chat-header-actions {
     display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+    gap: 5px;
 }
 
-/* Burbujas de Chat */
+.chat-messages-area {
+    flex-grow: 1;
+    background-color: var(--wp-bg);
+    background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
+    padding: 20px 7%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
 .message-bubble {
     max-width: 65%;
     padding: 6px 7px 8px 9px;
     border-radius: 7.5px;
     margin-bottom: 2px;
-    /* WP usa spacing muy chico */
     font-size: 14.2px;
     color: #111b21;
     line-height: 19px;
@@ -206,25 +333,18 @@ body {
     box-shadow: 0 1px 0.5px rgba(11, 20, 26, .13);
 }
 
-/* Burbujas TUS */
 .message-bubble.mine {
-    background-color: #d9fdd3;
-    /* Verde clarito WP */
+    background-color: var(--wp-bubble-me);
     align-self: flex-end;
     border-top-right-radius: 0;
-    /* Efecto punta WP */
 }
 
-/* Burbujas de ELLOS */
 .message-bubble.theirs {
-    background-color: #fff;
-    /* Blanco WP */
+    background-color: var(--wp-bubble-other);
     align-self: flex-start;
     border-top-left-radius: 0;
-    /* Efecto punta WP */
 }
 
-/* La hora (span) dentro de la burbuja */
 .message-bubble .time {
     display: block;
     font-size: 11px;
@@ -233,14 +353,13 @@ body {
     margin-top: 2px;
 }
 
-/* Barra de Input */
 .chat-input-area {
     height: 62px;
     background-color: #f0f2f5;
     display: flex;
     align-items: center;
     padding: 5px 10px;
-    border-top: 1px solid #d1d7db;
+    gap: 10px;
 }
 
 .chat-input-area input {
@@ -250,155 +369,30 @@ body {
     border-radius: 8px;
     border: none;
     outline: none;
-    margin: 0 10px;
     font-size: 15px;
     background-color: #fff;
-    color: #111b21;
 }
 
-.chat-input-area input::placeholder {
-    color: #8696a0;
-}
-
-.chat-input-area button {
+.chat-input-area button[type='submit'] {
     background: none;
     border: none;
-    color: #008069;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    text-transform: uppercase;
     padding: 10px;
-}
-
-/* =========================================
-   ESTILOS PANTALLA INICIO (HomeScreen.jsx)
-   ========================================= */
-.home-empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 0 10%;
-    text-align: center;
-    background-color: #f0f2f5;
-    border-bottom: 6px solid #43c961;
-    /* Detalle inferior verde WP */
-}
-
-/* Ocultamos los elementos viejos que no van */
-.home-empty-state h1 {
-    display: none;
-}
-
-.home-empty-state img {
-    max-width: 350px;
-    margin-bottom: 30px;
-    opacity: 0.8;
-}
-
-.home-empty-state p {
-    font-size: 16px;
-    color: #667781;
-    line-height: 20px;
-    font-weight: 300;
-}
-
-/* Sobreescribí lo anterior con esto para perfeccionar el look */
-:root {
-    --wp-header: #f0f2f5;
-    --wp-green: #00a884;
-    --wp-bg: #efeae2;
-    --wp-bubble-me: #d9fdd3;
-    --wp-bubble-other: #ffffff;
-}
-
-.whatsapp-container {
-    border-top: none;
-    /* Quitamos el borde tosco anterior */
-    height: 100vh;
-    display: flex;
-    background-color: #eae6df;
-}
-
-/* Sidebar Header (Look real) */
-.sidebar-section::before {
-    content: "";
-    display: block;
-    height: 60px;
-    background-color: var(--wp-header);
-    border-bottom: 1px solid #d1d7db;
-}
-
-.sidebar-section a {
-    height: 72px;
-    border-bottom: 1px solid #f2f2f2;
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
-}
-
-.sidebar-section a h3 {
-    font-weight: 500;
-    font-size: 16px;
-}
-
-/* Chat perfeccionado */
-.chat-messages-area {
-    background-color: var(--wp-bg);
-    background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
-    padding: 20px 5%;
-}
-
-.message-bubble {
-    padding: 6px 10px 8px;
-    margin-bottom: 8px;
-    border-radius: 8px;
-    position: relative;
-}
-
-.message-bubble.mine {
-    background-color: var(--wp-bubble-me);
-    align-self: flex-end;
-    box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
-}
-
-.message-bubble.theirs {
-    background-color: var(--wp-bubble-other);
-    align-self: flex-start;
-    box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
-}
-
-.chat-input-area {
-    background-color: #f0f2f5;
-    padding: 5px 16px;
-    gap: 10px;
-}
-
-.chat-input-area input {
-    border-radius: 8px;
-    height: 42px;
-    background: white;
-}
-
-.chat-input-area button {
-    color: #54656f;
+    color: var(--icon-color);
+    cursor: pointer;
     transition: color 0.2s;
 }
 
-.chat-input-area button:not(:disabled) {
+.chat-input-area button[type='submit']:not(:disabled) {
     color: var(--wp-green);
 }
 
 /* =========================================
-   ESTILOS PANTALLA LOGIN
+   LOGIN SCREEN (Del paso anterior)
    ========================================= */
 .login-container {
     height: 100vh;
     width: 100vw;
     background-color: #d1d7db;
-    /* Fondo gris de WP Web fuera de foco */
     display: flex;
     flex-direction: column;
 }
@@ -406,7 +400,6 @@ body {
 .login-header {
     height: 222px;
     background-color: #00a884;
-    /* Verde característico */
     width: 100%;
     position: absolute;
     top: 0;
@@ -478,10 +471,6 @@ body {
     outline: none;
 }
 
-.login-card input:focus {
-    border-color: #00a884;
-}
-
 .login-card button {
     background-color: #00a884;
     color: white;
@@ -491,9 +480,34 @@ body {
     border-radius: 24px;
     cursor: pointer;
     font-weight: 500;
-    transition: background-color 0.2s;
 }
 
-.login-card button:hover {
-    background-color: #017561;
+/* PANTALLA VACIA HOME */
+.home-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 10%;
+    text-align: center;
+    background-color: #f0f2f5;
+    border-bottom: 6px solid #43c961;
+}
+
+.home-empty-state h1 {
+    display: none;
+}
+
+.home-empty-state img {
+    max-width: 350px;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+.home-empty-state p {
+    font-size: 16px;
+    color: #667781;
+    line-height: 20px;
+    font-weight: 300;
 }
