@@ -511,3 +511,145 @@ body {
     line-height: 20px;
     font-weight: 300;
 }
+
+/* =========================================
+   NUEVAS FUNCIONALIDADES INTERACTIVAS
+   ========================================= */
+
+/* Menú Desplegable (Logout) */
+.menu-container {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: white;
+    box-shadow: 0 2px 5px 0 rgba(11, 20, 26, .26);
+    border-radius: 3px;
+    z-index: 1000;
+    padding: 10px 0;
+    min-width: 160px;
+}
+
+.dropdown-menu button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 24px;
+    font-size: 14px;
+    color: #3b4a54;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.dropdown-menu button:hover {
+    background-color: #f5f6f6;
+}
+
+/* Sin resultados en buscador */
+.no-results {
+    text-align: center;
+    padding: 30px;
+    color: #8696a0;
+    font-size: 14px;
+}
+
+/* Wrapper para el Chat + Info Lateral Derecha */
+.chat-layout-wrapper {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.chat-main-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+}
+
+/* Panel de Emojis */
+.chat-input-area {
+    position: relative;
+}
+
+.emoji-picker {
+    position: absolute;
+    bottom: 75px;
+    left: 10px;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 200;
+}
+
+.emoji-picker span {
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.emoji-picker span:hover {
+    transform: scale(1.2);
+}
+
+/* Panel Lateral Derecho de Info. de Contacto */
+.contact-info-panel {
+    width: 350px;
+    background-color: #f0f2f5;
+    border-left: 1px solid #d1d7db;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s;
+}
+
+.info-panel-header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 20px;
+    background-color: #f0f2f5;
+    border-bottom: 1px solid #d1d7db;
+}
+
+.info-panel-header h2 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #111b21;
+}
+
+.info-panel-body {
+    background-color: white;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(11, 20, 26, .08);
+}
+
+.info-panel-body img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+.info-panel-body h2 {
+    font-size: 24px;
+    color: #111b21;
+    margin-bottom: 5px;
+}
+
+.info-panel-body p {
+    font-size: 14px;
+    color: #667781;
+}
