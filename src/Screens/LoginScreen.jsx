@@ -21,7 +21,7 @@ export default function LoginScreen({ onLogin }) {
             <div className="login-body">
                 <div className="login-card">
                     <h2>Iniciá sesión para chatear</h2>
-                    <p>Ingresá tu nombre de desarrollador para continuar.</p>
+                    <p className='text-padding'>Ingresá tu nombre de desarrollador para continuar.</p>
                     <form onSubmit={handleSubmit}>
                         <input
                             type="text"
