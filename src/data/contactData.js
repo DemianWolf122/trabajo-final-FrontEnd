@@ -1,4 +1,3 @@
-// Exportamos un objeto masivo con toda la data de la aplicación
 export const appData = {
     currentUser: {
         name: 'Demian',
@@ -45,7 +44,7 @@ export const appData = {
             isTyping: false,
             messages: [
                 { id: 1, text: '¡Hola Demian! ¿Cómo venís con el curso de React?', send_by_me: false, created_at: '2024-06-01T09:00:00Z', is_read: true },
-                { id: 2, text: 'Hola Midu! Remando un poco con las clases, pero armando un clon god.', send_by_me: true, created_at: '2024-06-01T09:30:00Z', is_read: true }
+                { id: 2, text: 'Hola Midu! Remando un poco con los Hooks, pero armando un clon re cheto.', send_by_me: true, created_at: '2024-06-01T09:30:00Z', is_read: true }
             ]
         },
         {
@@ -58,7 +57,7 @@ export const appData = {
             isTyping: false,
             messages: [
                 { id: 1, text: 'Gente, subí un nuevo video sobre Node.js y Supabase.', send_by_me: false, created_at: '2024-06-01T08:00:00Z', is_read: true, sender_name: 'Fazt' },
-                { id: 2, text: '¡Ufff me viene de diez para el backend!', send_by_me: true, created_at: '2024-06-01T08:15:00Z', is_read: true },
+                { id: 2, text: '¡Ufff me viene de diez para el backend de mi proyecto final!', send_by_me: true, created_at: '2024-06-01T08:15:00Z', is_read: true },
                 { id: 3, text: '¿Alguien sabe si Supabase soporta triggers de Postgres nativos?', send_by_me: false, created_at: '2024-06-01T08:20:00Z', is_read: false, sender_name: 'UsuarioRandom123' }
             ]
         }
@@ -77,9 +76,9 @@ export const appData = {
         },
         {
             id: 102,
-            name: 'LOL',
-            description: 'League of Legends.',
-            icon: 'https://ui-avatars.com/api/?name=LOL&background=25D366&color=fff&rounded=true',
+            name: 'SaaS Dev Team',
+            description: 'Coordinación estratégica y desarrollo de la app web.',
+            icon: 'https://ui-avatars.com/api/?name=DevTeam&background=25D366&color=fff&rounded=true',
             groups: [
                 { id: 204, name: 'General', unread: 0 },
                 { id: 205, name: 'Deploy & DevOps', unread: 1 },
@@ -89,5 +88,4 @@ export const appData = {
     ]
 };
 
-// Mantenemos la compatibilidad con tu código viejo, pero exportamos el objeto completo
 export default appData.chats;

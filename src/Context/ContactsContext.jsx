@@ -1,12 +1,11 @@
 import { createContext, useState, useEffect } from "react";
 import { appData } from "../data/contactData.js";
 
-// Creamos el contexto con valores por defecto para el autocompletado del IDE
 export const ContactsContext = createContext({
     chats: [],
     communities: [],
     currentUser: {},
-    activeTab: 'chats', // 'chats', 'communities', 'status', 'settings'
+    activeTab: 'chats',
     setActiveTab: () => { },
     sendMessage: () => { },
     clearChat: () => { },
@@ -14,12 +13,10 @@ export const ContactsContext = createContext({
 });
 
 const ContactsContextProvider = ({ children }) => {
-    // 1. Estados Principales
     const [chatsState, setChatsState] = useState(appData.chats);
     const [communitiesState, setCommunitiesState] = useState(appData.communities);
     const [activeTab, setActiveTab] = useState('chats');
 
-    // 2. Funciones de Mensajería
     const sendMessage = (contactId, text) => {
         const newMessage = {
             id: Date.now(),
@@ -32,7 +29,6 @@ const ContactsContextProvider = ({ children }) => {
         setChatsState(prevChats =>
             prevChats.map(chat => {
                 if (chat.id === Number(contactId)) {
-                    // Ponemos el chat actualizado al principio de la lista
                     return {
                         ...chat,
                         messages: [...chat.messages, newMessage],
@@ -41,7 +37,6 @@ const ContactsContextProvider = ({ children }) => {
                 }
                 return chat;
             }).sort((a, b) => {
-                // Ordenar para que el chat modificado quede arriba
                 if (a.id === Number(contactId)) return -1;
                 if (b.id === Number(contactId)) return 1;
                 return 0;
@@ -49,7 +44,6 @@ const ContactsContextProvider = ({ children }) => {
         );
     };
 
-    // 3. Función para limpiar un chat (Opción del menú de 3 puntitos)
     const clearChat = (contactId) => {
         setChatsState(prevChats =>
             prevChats.map(chat =>
@@ -60,7 +54,6 @@ const ContactsContextProvider = ({ children }) => {
         );
     };
 
-    // 4. Función para marcar como leído (Quita la burbuja verde de notificaciones)
     const markAsRead = (contactId) => {
         setChatsState(prevChats =>
             prevChats.map(chat =>
@@ -71,7 +64,6 @@ const ContactsContextProvider = ({ children }) => {
         );
     };
 
-    // Objeto masivo que le pasamos a toda la app
     const contextValue = {
         chats: chatsState,
         communities: communitiesState,
