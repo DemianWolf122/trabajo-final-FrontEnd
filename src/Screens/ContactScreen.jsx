@@ -3,34 +3,50 @@ import { useParams, useNavigate } from 'react-router'
 import { ContactsContext } from '../Context/ContactsContext.jsx'
 
 export default function ContactScreen() {
-    const { chats, sendMessage, clearChat, markAsRead } = useContext(ContactsContext)
+    const { chats, sendMessage, clearChat, markAsRead, editarContacto, borrarContacto, cargando } = useContext(ContactsContext)
     const { contact_id } = useParams()
     const navigate = useNavigate()
     const [newMessage, setNewMessage] = useState("")
     const [showMenu, setShowMenu] = useState(false)
     const scrollRef = useRef(null)
 
-    const contact_selected = chats.find(c => Number(c.id) === Number(contact_id))
+    const contact_selected = chats.find(c => String(c.id) === String(contact_id))
 
     // Marcar como leído al entrar
     useEffect(() => {
         if (contact_selected && contact_selected.unread_count > 0) {
             markAsRead(contact_id)
         }
-    }, [contact_id])
+    }, [contact_id, contact_selected])
 
-    // Scroll automático súper suave
+    // Scroll automático
     useEffect(() => {
         if (scrollRef.current) scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
     }, [contact_selected?.messages])
 
-    if (!contact_selected) return <div className="chat-error">Cargando chat...</div>
+    if (!contact_selected) {
+        return <div className="chat-error">{cargando ? 'Cargando chat...' : 'Contacto no encontrado.'}</div>
+    }
 
     const handleFormSubmit = (e) => {
         e.preventDefault()
         if (newMessage.trim() === "") return
         sendMessage(contact_id, newMessage)
         setNewMessage("")
+    }
+
+    const handleEditar = () => {
+        setShowMenu(false)
+        const nuevo = window.prompt('Nuevo nombre del contacto:', contact_selected.name)
+        if (nuevo && nuevo.trim()) editarContacto(contact_id, nuevo.trim())
+    }
+
+    const handleEliminar = () => {
+        setShowMenu(false)
+        if (window.confirm(`¿Eliminar el contacto "${contact_selected.name}" y todos sus mensajes?`)) {
+            borrarContacto(contact_id)
+            navigate('/')
+        }
     }
 
     return (
@@ -54,8 +70,9 @@ export default function ContactScreen() {
                         </button>
                         {showMenu && (
                             <div className="dropdown-menu slide-down">
+                                <button onClick={handleEditar}>Editar nombre</button>
                                 <button onClick={() => { clearChat(contact_id); setShowMenu(false) }}>Vaciar mensajes</button>
-                                <button onClick={() => alert('Reportar usuario')}>Reportar</button>
+                                <button className="danger-text" onClick={handleEliminar}>Eliminar contacto</button>
                             </div>
                         )}
                     </div>

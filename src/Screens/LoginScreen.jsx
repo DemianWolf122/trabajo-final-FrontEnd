@@ -1,12 +1,39 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { useAuth } from '../Context/AuthContext.jsx';
 
-export default function LoginScreen({ onLogin }) {
-    const [username, setUsername] = useState('');
+export default function LoginScreen() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [cargando, setCargando] = useState(false);
+    const { login, loginInvitado } = useAuth();
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (username.trim() !== '') {
-            onLogin(username);
+        setError('');
+        setCargando(true);
+        try {
+            await login(email, password);
+            navigate('/');
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setCargando(false);
+        }
+    };
+
+    const handleInvitado = async () => {
+        setError('');
+        setCargando(true);
+        try {
+            await loginInvitado();
+            navigate('/');
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setCargando(false);
         }
     };
 
@@ -21,17 +48,17 @@ export default function LoginScreen({ onLogin }) {
             <div className="login-body">
                 <div className="login-card">
                     <h2>Iniciá sesión para chatear</h2>
-                    <p className='text-padding'>Ingresá tu nombre de desarrollador para continuar.</p>
+                    <p className='text-padding'>Ingresá con tu email y contraseña.</p>
                     <form onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            placeholder="Tu nombre (Ej: Demian)"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
-                        <button type="submit">Entrar al Chat</button>
+                        <input type="email" placeholder="Tu email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                        <input type="password" placeholder="Tu contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        {error && <p className="login-error">{error}</p>}
+                        <button type="submit" disabled={cargando}>{cargando ? 'Ingresando...' : 'Entrar al Chat'}</button>
                     </form>
+                    <button type="button" className="login-guest-btn" onClick={handleInvitado} disabled={cargando}>
+                        Entrar como invitado
+                    </button>
+                    <p className="login-switch">¿No tenés cuenta? <Link to="/register">Registrate</Link></p>
                 </div>
             </div>
         </div>

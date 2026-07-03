@@ -3,18 +3,34 @@ import { ContactsContext } from '../Context/ContactsContext.jsx'
 import { Link } from 'react-router'
 
 export default function ContactSidebar({ user, onLogout }) {
-    const { chats, communities, activeTab, setActiveTab } = useContext(ContactsContext)
+    const { chats, communities, activeTab, setActiveTab, crearContacto } = useContext(ContactsContext)
     const [searchTerm, setSearchTerm] = useState('')
     const [showMenu, setShowMenu] = useState(false)
+    const [showNewForm, setShowNewForm] = useState(false)
+    const [nuevoNombre, setNuevoNombre] = useState('')
 
-    // Filtramos según la pestaña activa
-    const filteredChats = chats.filter(chat => chat.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    const term = searchTerm.toLowerCase()
+    const filteredChats = chats.filter(chat => chat.name.toLowerCase().includes(term))
+    const filteredCommunities = communities.filter(comm =>
+        comm.name.toLowerCase().includes(term) || comm.description.toLowerCase().includes(term)
+    )
+
+    const handleCrear = async (e) => {
+        e.preventDefault()
+        if (nuevoNombre.trim() === '') return
+        await crearContacto(nuevoNombre.trim())
+        setNuevoNombre('')
+        setShowNewForm(false)
+    }
 
     return (
         <div className="sidebar-wrapper">
             <header className="sidebar-header">
                 <img src={`https://ui-avatars.com/api/?name=${user}&background=00a884&color=fff`} alt="Tú" className="my-avatar" />
                 <div className="sidebar-header-icons">
+                    <button className="icon-btn" title="Nuevo contacto" onClick={() => { setShowNewForm(!showNewForm); setActiveTab('chats') }}>
+                        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.81v15.362l4.135-4.134h11.87c1.032 0 1.668-.614 1.668-1.634V4.81c0-1.02-.636-1.635-1.668-1.635zM12 14.075h-1.2v-2.9H7.9v-1.2h2.9V7.075H12v2.9h2.9v1.2H12v2.9z"></path></svg>
+                    </button>
                     <button className={`icon-btn ${activeTab === 'communities' ? 'active-icon' : ''}`} title="Comunidades" onClick={() => setActiveTab('communities')}>
                         <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-6 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm12 0a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3.46 19.88A6.98 6.98 0 0 1 12 16a6.98 6.98 0 0 1 8.54 3.88A9.96 9.96 0 0 0 12 2a9.96 9.96 0 0 0-8.54 17.88z"></path></svg>
                     </button>
@@ -27,7 +43,7 @@ export default function ContactSidebar({ user, onLogout }) {
                         </button>
                         {showMenu && (
                             <div className="dropdown-menu fade-in">
-                                <button onClick={() => alert('Configuración próximamente')}>Configuración</button>
+                                <button onClick={() => { setShowNewForm(true); setShowMenu(false) }}>Nuevo contacto</button>
                                 <button onClick={onLogout}>Cerrar sesión</button>
                             </div>
                         )}
@@ -35,7 +51,13 @@ export default function ContactSidebar({ user, onLogout }) {
                 </div>
             </header>
 
-            {/* Barra de búsqueda animada */}
+            {showNewForm && (
+                <form className="new-contact-form fade-in" onSubmit={handleCrear}>
+                    <input autoFocus type="text" placeholder="Nombre del nuevo contacto" value={nuevoNombre} onChange={(e) => setNuevoNombre(e.target.value)} />
+                    <button type="submit">Agregar</button>
+                </form>
+            )}
+
             <div className="sidebar-search">
                 <div className="search-bar">
                     <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#54656f" d="M15.009 13.805h-.636l-.22-.219a5.184 5.184 0 0 0 1.256-3.386 5.207 5.207 0 1 0-5.207 5.208 5.183 5.183 0 0 0 3.385-1.255l.221.22v.635l4.004 3.999 1.194-1.195-3.997-4.007zm-4.808 0a3.605 3.605 0 1 1 0-7.21 3.605 3.605 0 0 1 0 7.21z"></path></svg>
@@ -64,7 +86,11 @@ export default function ContactSidebar({ user, onLogout }) {
                     </Link>
                 ))}
 
-                {activeTab === 'communities' && communities.map(comm => (
+                {activeTab === 'chats' && filteredChats.length === 0 && (
+                    <p className="empty-list-msg">No hay contactos todavía.<br />Tocá el ícono ✚ para agregar uno.</p>
+                )}
+
+                {activeTab === 'communities' && filteredCommunities.map(comm => (
                     <div key={comm.id} className="community-item slide-in-left">
                         <div className="comm-header">
                             <img src={comm.icon} alt={comm.name} />

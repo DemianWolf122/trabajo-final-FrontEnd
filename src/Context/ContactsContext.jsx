@@ -1,78 +1,165 @@
 import { createContext, useState, useEffect } from "react";
-import { appData } from "../data/contactData.js";
+import api from "../services/api";
+import { useAuth } from "./AuthContext";
 
-export const ContactsContext = createContext({
-    chats: [],
-    communities: [],
-    currentUser: {},
-    activeTab: 'chats',
-    setActiveTab: () => { },
-    sendMessage: () => { },
-    clearChat: () => { },
-    markAsRead: () => { }
+export const ContactsContext = createContext();
+
+// Comunidades: función extra (no forma parte del CRUD de la API), se deja estática.
+const COMMUNITIES = [
+    {
+        id: 101,
+        name: 'UTN Programación Web',
+        description: 'Comunidad oficial de alumnos de la UTN. Avisos, dudas y proyectos.',
+        icon: 'https://ui-avatars.com/api/?name=UTN&background=0055A4&color=fff&rounded=true',
+        groups: [
+            { id: 201, name: 'Avisos Oficiales', unread: 2 },
+            { id: 202, name: 'Dudas Front-End (Martes/Jueves)', unread: 15 },
+            { id: 203, name: 'Off-topic / Memes', unread: 0 }
+        ]
+    }
+];
+
+const AUTO_REPLIES = [
+    '¡Genial! 🙌', 'Jaja tal cual', 'Dale, lo vemos 👀', 'Buenísimo, gracias por avisar',
+    'Mmm interesante 🤔', 'Ahí lo reviso y te digo', '¡De una! 🚀', 'Perfecto, quedamos así 👍'
+];
+
+// Adaptamos la forma de la API a la forma que ya usan los componentes.
+const mapMensaje = (m) => ({
+    id: m._id,
+    text: m.texto,
+    send_by_me: m.send_by_me,
+    created_at: m.fecha,
+    is_read: m.leido,
+    sender_name: undefined
+});
+
+const buildChat = (contacto, mensajes) => ({
+    id: contacto._id,
+    name: contacto.nombre,
+    isGroup: contacto.isGroup || false,
+    profile_picture: contacto.profile_picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(contacto.nombre)}&background=00a884&color=fff`,
+    last_time_connection: 'en línea',
+    unread_count: mensajes.filter(m => !m.send_by_me && !m.leido).length,
+    isTyping: false,
+    messages: mensajes.map(mapMensaje)
 });
 
 const ContactsContextProvider = ({ children }) => {
-    const [chatsState, setChatsState] = useState(appData.chats);
-    const [communitiesState, setCommunitiesState] = useState(appData.communities);
+    const { user } = useAuth();
+    const [chatsState, setChatsState] = useState([]);
+    const [communitiesState] = useState(COMMUNITIES);
     const [activeTab, setActiveTab] = useState('chats');
+    const [cargando, setCargando] = useState(false);
 
-    const sendMessage = (contactId, text) => {
-        const newMessage = {
-            id: Date.now(),
-            text: text,
-            send_by_me: true,
-            created_at: new Date().toISOString(),
-            is_read: false
-        };
-
-        setChatsState(prevChats =>
-            prevChats.map(chat => {
-                if (chat.id === Number(contactId)) {
-                    return {
-                        ...chat,
-                        messages: [...chat.messages, newMessage],
-                        last_time_connection: 'en línea'
-                    };
-                }
-                return chat;
-            }).sort((a, b) => {
-                if (a.id === Number(contactId)) return -1;
-                if (b.id === Number(contactId)) return 1;
-                return 0;
-            })
-        );
+    const refrescar = async () => {
+        if (!localStorage.getItem('chat_token')) return;
+        setCargando(true);
+        try {
+            const res = await api.getContactos();
+            const contactos = res.data.contactos;
+            const chats = await Promise.all(contactos.map(async (c) => {
+                const mres = await api.getMensajes(c._id);
+                return buildChat(c, mres.data.mensajes);
+            }));
+            setChatsState(chats);
+        } catch (error) {
+            console.error('Error cargando contactos:', error.message);
+        } finally {
+            setCargando(false);
+        }
     };
 
-    const clearChat = (contactId) => {
-        setChatsState(prevChats =>
-            prevChats.map(chat =>
-                chat.id === Number(contactId)
-                    ? { ...chat, messages: [] }
+    useEffect(() => {
+        if (user) refrescar();
+        else setChatsState([]);
+    }, [user]);
+
+    const sendMessage = async (contactId, text) => {
+        try {
+            // 1. Enviar mi mensaje (se persiste en la base)
+            const res = await api.enviarMensaje({ texto: text, contactoId: contactId });
+            const nuevo = mapMensaje(res.data.mensaje);
+            setChatsState(prev => prev.map(chat =>
+                chat.id === contactId
+                    ? { ...chat, messages: [...chat.messages, nuevo], last_time_connection: 'en línea' }
                     : chat
-            )
-        );
+            ).sort((a, b) => (a.id === contactId ? -1 : b.id === contactId ? 1 : 0)));
+
+            // 2. El contacto "ve" el mensaje y empieza a escribir
+            setTimeout(() => {
+                setChatsState(prev => prev.map(chat =>
+                    chat.id === contactId
+                        ? { ...chat, isTyping: true, messages: chat.messages.map(m => m.send_by_me ? { ...m, is_read: true } : m) }
+                        : chat
+                ));
+            }, 800);
+
+            // 3. Responde automáticamente (también se persiste)
+            setTimeout(async () => {
+                try {
+                    const replyText = AUTO_REPLIES[Math.floor(Math.random() * AUTO_REPLIES.length)];
+                    const rres = await api.enviarMensaje({ texto: replyText, contactoId: contactId, send_by_me: false, leido: true });
+                    const reply = mapMensaje(rres.data.mensaje);
+                    setChatsState(prev => prev.map(chat =>
+                        chat.id === contactId
+                            ? { ...chat, isTyping: false, messages: [...chat.messages, reply] }
+                            : chat
+                    ));
+                } catch (e) {
+                    setChatsState(prev => prev.map(chat => chat.id === contactId ? { ...chat, isTyping: false } : chat));
+                }
+            }, 2600);
+        } catch (error) {
+            console.error('Error enviando mensaje:', error.message);
+        }
+    };
+
+    const clearChat = async (contactId) => {
+        try {
+            await api.vaciarChat(contactId);
+            setChatsState(prev => prev.map(chat => chat.id === contactId ? { ...chat, messages: [] } : chat));
+        } catch (error) {
+            console.error('Error vaciando chat:', error.message);
+        }
     };
 
     const markAsRead = (contactId) => {
-        setChatsState(prevChats =>
-            prevChats.map(chat =>
-                chat.id === Number(contactId)
-                    ? { ...chat, unread_count: 0 }
-                    : chat
-            )
-        );
+        setChatsState(prev => prev.map(chat => chat.id === contactId ? { ...chat, unread_count: 0 } : chat));
+    };
+
+    const crearContacto = async (nombre, profile_picture) => {
+        const res = await api.crearContacto({ nombre, profile_picture: profile_picture || '' });
+        setChatsState(prev => [...prev, buildChat(res.data.contacto, [])]);
+        return res.data.contacto;
+    };
+
+    const editarContacto = async (contactId, nombre) => {
+        const res = await api.editarContacto(contactId, { nombre });
+        setChatsState(prev => prev.map(chat =>
+            chat.id === contactId ? { ...chat, name: res.data.contacto.nombre } : chat
+        ));
+    };
+
+    const borrarContacto = async (contactId) => {
+        await api.borrarContacto(contactId);
+        setChatsState(prev => prev.filter(chat => chat.id !== contactId));
     };
 
     const contextValue = {
         chats: chatsState,
         communities: communitiesState,
-        currentUser: appData.currentUser,
+        currentUser: user,
         activeTab,
         setActiveTab,
+        cargando,
+        refrescar,
         sendMessage,
         clearChat,
-        markAsRead
+        markAsRead,
+        crearContacto,
+        editarContacto,
+        borrarContacto
     };
 
     return (
