@@ -4,7 +4,11 @@ Frontend del TP integrador (Full-Stack: React + Express): una **app de mensajerÃ
 
 Hecho con **React + Vite**.
 
+- **App en producciÃ³n:** https://trabajo-final-front-end-clonwhatsap.vercel.app
+- **API (backend):** https://trabajo-final-backend-etnv.onrender.com
 - **Repo del backend:** https://github.com/DemianWolf122/trabajo-final-Backend
+
+> Nota: el backend usa el plan gratuito de Render y "se duerme" tras inactividad; la primera carga puede tardar ~50 segundos.
 
 ## Stack
 
