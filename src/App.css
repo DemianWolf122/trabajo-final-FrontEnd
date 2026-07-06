@@ -209,26 +209,34 @@ body {
     padding-right: 46px;
 }
 
-.password-toggle {
+/* Especificidad alta para ganarle a la regla genérica .login-card button */
+.login-card .password-toggle {
     position: absolute;
-    right: 6px;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #54656f;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 2px;
+    margin: 0;
+    width: auto;
+    color: #8696a0;
     cursor: pointer;
-    padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    transition: color 0.2s, background 0.2s;
+    transition: color 0.2s;
 }
 
-.password-toggle:hover {
-    color: var(--wp-green);
-    background-color: #f0f2f5;
+.login-card .password-toggle:hover {
+    color: #54656f;
+    transform: translateY(-50%);
+}
+
+.login-card .password-toggle svg {
+    width: 20px;
+    height: 20px;
 }
 
 .login-card button {
