@@ -17,7 +17,17 @@ const request = async (path, { method = 'GET', body, auth = true } = {}) => {
     })
 
     const data = await res.json().catch(() => ({}))
-    if (!res.ok) throw new Error(data.message || 'Hubo un error en la petición')
+
+    if (!res.ok) {
+        // Token inválido/expirado (o de un usuario que ya no existe): cerramos sesión
+        // y mandamos al login, en vez de fallar en silencio.
+        if (res.status === 401 && auth) {
+            localStorage.removeItem('chat_token')
+            localStorage.removeItem('chat_user')
+            if (!window.location.pathname.includes('/login')) window.location.href = '/login'
+        }
+        throw new Error(data.message || 'Hubo un error en la petición')
+    }
     return data
 }
 

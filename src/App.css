@@ -278,6 +278,32 @@ body {
     color: var(--wp-green);
 }
 
+/* Botón de Chats: es la sección principal, se destaca del resto */
+.chats-main-btn {
+    background-color: var(--wp-green);
+    color: #fff !important;
+    margin-right: 4px;
+    box-shadow: 0 2px 6px rgba(0, 168, 132, .3);
+}
+
+.chats-main-btn:hover {
+    background-color: #017561;
+}
+
+.chats-main-btn.active {
+    background-color: #017561;
+    transform: scale(1.05);
+}
+
+.form-error {
+    color: #ea0038;
+    background-color: #fdecef;
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin: 0;
+}
+
 .menu-container {
     position: relative;
 }

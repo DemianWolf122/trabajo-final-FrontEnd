@@ -13,6 +13,7 @@ export default function ContactSidebar({ user, onLogout }) {
     const [showNewCom, setShowNewCom] = useState(false)
     const [comNombre, setComNombre] = useState('')
     const [comDesc, setComDesc] = useState('')
+    const [comError, setComError] = useState('')
 
     const term = searchTerm.toLowerCase()
     const filteredChats = chats.filter(chat => chat.name.toLowerCase().includes(term))
@@ -30,11 +31,19 @@ export default function ContactSidebar({ user, onLogout }) {
 
     const handleCrearComunidad = async (e) => {
         e.preventDefault()
-        if (comNombre.trim().length < 2) return
-        await crearComunidad(comNombre.trim(), comDesc.trim())
-        setComNombre('')
-        setComDesc('')
-        setShowNewCom(false)
+        setComError('')
+        if (comNombre.trim().length < 2) {
+            setComError('El nombre debe tener al menos 2 caracteres')
+            return
+        }
+        try {
+            await crearComunidad(comNombre.trim(), comDesc.trim())
+            setComNombre('')
+            setComDesc('')
+            setShowNewCom(false)
+        } catch (err) {
+            setComError(err.message)
+        }
     }
 
     const handleBorrarComunidad = async (e, id) => {
@@ -48,14 +57,15 @@ export default function ContactSidebar({ user, onLogout }) {
             <header className="sidebar-header">
                 <img src={`https://ui-avatars.com/api/?name=${user}&background=00a884&color=fff`} alt="Tú" className="my-avatar" />
                 <div className="sidebar-header-icons">
-                    <button className="icon-btn" title="Nuevo contacto" onClick={() => { setShowNewForm(!showNewForm); setActiveTab('chats') }}>
-                        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.81v15.362l4.135-4.134h11.87c1.032 0 1.668-.614 1.668-1.634V4.81c0-1.02-.636-1.635-1.668-1.635zM12 14.075h-1.2v-2.9H7.9v-1.2h2.9V7.075H12v2.9h2.9v1.2H12v2.9z"></path></svg>
+                    {/* Chats: es la sección principal, va primero y con estilo destacado */}
+                    <button className={`icon-btn chats-main-btn ${activeTab === 'chats' ? 'active' : ''}`} title="Chats" onClick={() => setActiveTab('chats')}>
+                        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 2C6.5 2 2 6 2 11c0 2.2.9 4.2 2.3 5.8L3 22l5.3-1.4c1.1.5 2.4.8 3.7.8 5.5 0 10-4 10-9S17.5 2 12 2zm-4 8h8v1.5H8V10zm0 3h6v1.5H8V13z"></path></svg>
                     </button>
                     <button className={`icon-btn ${activeTab === 'communities' ? 'active-icon' : ''}`} title="Comunidades" onClick={() => setActiveTab('communities')}>
                         <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-6 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm12 0a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3.46 19.88A6.98 6.98 0 0 1 12 16a6.98 6.98 0 0 1 8.54 3.88A9.96 9.96 0 0 0 12 2a9.96 9.96 0 0 0-8.54 17.88z"></path></svg>
                     </button>
-                    <button className={`icon-btn ${activeTab === 'chats' ? 'active-icon' : ''}`} title="Chats" onClick={() => setActiveTab('chats')}>
-                        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.81v15.362l4.135-4.134h11.87c1.032 0 1.668-.614 1.668-1.634V4.81c0-1.02-.636-1.635-1.668-1.635zM10.74 12.015l-3.327-3.327h2.247V5.592h2.184v3.096h2.246l-3.35 3.327z"></path></svg>
+                    <button className="icon-btn" title="Nuevo contacto" onClick={() => { setShowNewForm(!showNewForm); setActiveTab('chats') }}>
+                        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.81v15.362l4.135-4.134h11.87c1.032 0 1.668-.614 1.668-1.634V4.81c0-1.02-.636-1.635-1.668-1.635zM12 14.075h-1.2v-2.9H7.9v-1.2h2.9V7.075H12v2.9h2.9v1.2H12v2.9z"></path></svg>
                     </button>
                     <div className="menu-container">
                         <button className="icon-btn" onClick={() => setShowMenu(!showMenu)}>
@@ -124,6 +134,7 @@ export default function ContactSidebar({ user, onLogout }) {
                             <form className="new-community-form fade-in" onSubmit={handleCrearComunidad}>
                                 <input autoFocus type="text" placeholder="Nombre de la comunidad" value={comNombre} onChange={(e) => setComNombre(e.target.value)} maxLength={60} />
                                 <input type="text" placeholder="Descripción (opcional)" value={comDesc} onChange={(e) => setComDesc(e.target.value)} maxLength={200} />
+                                {comError && <p className="form-error">{comError}</p>}
                                 <div className="form-actions">
                                     <button type="submit" disabled={comNombre.trim().length < 2}>Crear</button>
                                     <button type="button" className="btn-cancel" onClick={() => setShowNewCom(false)}>Cancelar</button>
