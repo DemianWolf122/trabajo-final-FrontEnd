@@ -23,8 +23,10 @@ Hecho con **React + Vite**.
 - Ingreso como **invitado** (usuario demo).
 - Lista de contactos (traída de la API).
 - Chat: enviar mensajes (persistidos), respuesta automática simulada, vaciar chat.
-- **CRUD de contactos**: crear (✚), editar nombre y eliminar (con sus mensajes).
-- UI responsiva (mobile / desktop), con la sesión persistida al refrescar.
+- **CRUD de contactos**: crear (✚), y en el panel de detalle del contacto: ver info/estadísticas, editar nombre y eliminar (con sus mensajes).
+- **Comunidades**: pestaña con CRUD real (crear y borrar comunidades, traídas de la API).
+- **Perfil / Configuración**: pantalla para ver los datos de la cuenta y editar el nombre del usuario.
+- UI responsiva (mobile / desktop) con menú adaptado, y sesión persistida al refrescar.
 
 ## Instalación
 
