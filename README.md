@@ -48,8 +48,8 @@ Hecho con **React + Vite**.
 
 ## Usuario de prueba
 
-- **Email:** `demo@chat.com`
-- **Password:** `ChatApp2026`
+- **Email:** `demianfredes@gmail.com`
+- **Password:** `demianfredes1234`
 
 También podés usar el botón **"Entrar como invitado"**.
 
