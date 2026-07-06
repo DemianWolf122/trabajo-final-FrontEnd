@@ -828,6 +828,226 @@ body {
     background-color: var(--wp-bg);
 }
 
+/* ===== Panel de detalle del contacto ===== */
+.slide-in-right {
+    animation: slideInRight 0.25s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.contact-detail-panel {
+    width: 380px;
+    flex-shrink: 0;
+    background-color: #fff;
+    border-left: 1px solid #d1d7db;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.detail-header {
+    height: 60px;
+    background-color: var(--wp-header);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 0 16px;
+    border-bottom: 1px solid #d1d7db;
+    flex-shrink: 0;
+}
+
+.detail-header h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #111b21;
+}
+
+.detail-body {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 24px;
+    text-align: center;
+}
+
+.detail-avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(11, 20, 26, .15);
+}
+
+.detail-name {
+    font-size: 22px;
+    font-weight: 500;
+    color: #111b21;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-status {
+    font-size: 14px;
+    color: #667781;
+    margin-top: 4px;
+}
+
+.detail-stats {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    width: 100%;
+    justify-content: center;
+}
+
+.detail-stat {
+    background-color: #f0f2f5;
+    border-radius: 10px;
+    padding: 12px 18px;
+    display: flex;
+    flex-direction: column;
+    min-width: 80px;
+}
+
+.detail-stat strong {
+    font-size: 20px;
+    color: var(--wp-green);
+}
+
+.detail-stat span {
+    font-size: 12px;
+    color: #667781;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 4px;
+    border-top: 1px solid #f0f2f5;
+    font-size: 14px;
+    color: #111b21;
+}
+
+.detail-label {
+    color: #667781;
+}
+
+.detail-actions {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.detail-action-btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    background-color: #f0f2f5;
+    border-radius: 10px;
+    font-size: 14.5px;
+    color: #111b21;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: left;
+    padding-left: 18px;
+}
+
+.detail-action-btn:hover {
+    background-color: #e4e6e9;
+}
+
+.danger-text {
+    color: #ea0038 !important;
+}
+
+.detail-edit-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.detail-edit-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d7db;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+    text-align: center;
+}
+
+.detail-edit-form input:focus {
+    border-color: var(--wp-green);
+}
+
+.detail-edit-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-green,
+.btn-gray,
+.btn-danger {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: opacity 0.2s;
+}
+
+.btn-green {
+    background-color: var(--wp-green);
+    color: white;
+}
+
+.btn-green:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-gray {
+    background-color: #f0f2f5;
+    color: #111b21;
+}
+
+.btn-danger {
+    background-color: #ea0038;
+    color: white;
+}
+
+.detail-confirm {
+    background-color: #fdf0f2;
+    border: 1px solid #f5c6cf;
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 14px;
+    color: #111b21;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 @media (max-width: 768px) {
     .hide-on-mobile {
         display: none !important;
@@ -884,6 +1104,14 @@ body {
     .animated-input {
         font-size: 14px;
         padding: 8px;
+    }
+
+    /* En mobile el panel de detalle ocupa toda la pantalla */
+    .contact-detail-panel {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        z-index: 2000;
     }
 }
 

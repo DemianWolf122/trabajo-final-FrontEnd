@@ -40,6 +40,7 @@ const buildChat = (contacto, mensajes) => ({
     isGroup: contacto.isGroup || false,
     profile_picture: contacto.profile_picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(contacto.nombre)}&background=00a884&color=fff`,
     last_time_connection: 'en línea',
+    fecha_creacion: contacto.fecha_creacion,
     unread_count: mensajes.filter(m => !m.send_by_me && !m.leido).length,
     isTyping: false,
     messages: mensajes.map(mapMensaje)
