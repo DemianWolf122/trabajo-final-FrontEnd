@@ -62,7 +62,13 @@ export default function ContactSidebar({ user, onLogout }) {
                         <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 2C6.5 2 2 6 2 11c0 2.2.9 4.2 2.3 5.8L3 22l5.3-1.4c1.1.5 2.4.8 3.7.8 5.5 0 10-4 10-9S17.5 2 12 2zm-4 8h8v1.5H8V10zm0 3h6v1.5H8V13z"></path></svg>
                     </button>
                     <button className={`icon-btn ${activeTab === 'communities' ? 'active-icon' : ''}`} title="Comunidades" onClick={() => setActiveTab('communities')}>
-                        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-6 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm12 0a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3.46 19.88A6.98 6.98 0 0 1 12 16a6.98 6.98 0 0 1 8.54 3.88A9.96 9.96 0 0 0 12 2a9.96 9.96 0 0 0-8.54 17.88z"></path></svg>
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                            <circle cx="12" cy="12" r="9" />
+                            <line x1="3" y1="12" x2="21" y2="12" />
+                            <ellipse cx="12" cy="12" rx="4" ry="9" />
+                            <path d="M5.2 6.5C7.3 8 9.6 8.7 12 8.7s4.7-.7 6.8-2.2" />
+                            <path d="M5.2 17.5C7.3 16 9.6 15.3 12 15.3s4.7.7 6.8 2.2" />
+                        </svg>
                     </button>
                     <button className="icon-btn" title="Nuevo contacto" onClick={() => { setShowNewForm(!showNewForm); setActiveTab('chats') }}>
                         <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.81v15.362l4.135-4.134h11.87c1.032 0 1.668-.614 1.668-1.634V4.81c0-1.02-.636-1.635-1.668-1.635zM12 14.075h-1.2v-2.9H7.9v-1.2h2.9V7.075H12v2.9h2.9v1.2H12v2.9z"></path></svg>

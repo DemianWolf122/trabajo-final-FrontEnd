@@ -17,6 +17,7 @@
 
 body {
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     background-color: #eae6df;
 }
@@ -103,6 +104,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    height: 100dvh;
     background-color: #f0f2f5;
 }
 
@@ -135,6 +137,7 @@ body {
 
 .login-container {
     height: 100vh;
+    height: 100dvh;
     background-color: #d1d7db;
     display: flex;
     flex-direction: column;
@@ -229,9 +232,15 @@ body {
     transition: color 0.2s;
 }
 
-.login-card .password-toggle:hover {
+.login-card .password-toggle:hover,
+.login-card .password-toggle:active,
+.login-card .password-toggle:focus {
     color: #54656f;
-    transform: translateY(-50%);
+    transform: translateY(-50%) !important;
+    background: none !important;
+    box-shadow: none !important;
+    outline: none;
+    scale: 1 !important;
 }
 
 .login-card .password-toggle svg {
@@ -256,6 +265,7 @@ body {
 
 .whatsapp-container {
     height: 100vh;
+    height: 100dvh;
     display: flex;
     background-color: #fff;
     width: 100%;
@@ -1465,6 +1475,7 @@ body {
 #root {
     width: 100%;
     height: 100vh;
+    height: 100dvh;
 }
 
 @media (min-width: 2000px) {
@@ -1483,6 +1494,7 @@ body {
         width: 1600px;
         max-width: 100%;
         height: 95vh;
+        height: 95dvh;
         box-shadow: 0 17px 50px 0 rgba(11, 20, 26, .19);
         border-radius: 10px;
         overflow: hidden;
