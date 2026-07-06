@@ -138,7 +138,15 @@ export default function ContactSidebar({ user, onLogout }) {
                         {filteredCommunities.map(comm => (
                             <div key={comm.id} className="community-item slide-in-left">
                                 <div className="comm-header">
-                                    <img src={comm.icon} alt={comm.name} />
+                                    <div className="comm-icon" aria-label={comm.name}>
+                                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" strokeWidth="1.5" strokeLinecap="round">
+                                            <circle cx="12" cy="12" r="9" />
+                                            <line x1="3" y1="12" x2="21" y2="12" />
+                                            <ellipse cx="12" cy="12" rx="4" ry="9" />
+                                            <path d="M5.2 6.5C7.3 8 9.6 8.7 12 8.7s4.7-.7 6.8-2.2" />
+                                            <path d="M5.2 17.5C7.3 16 9.6 15.3 12 15.3s4.7.7 6.8 2.2" />
+                                        </svg>
+                                    </div>
                                     <div className="comm-header-text">
                                         <h3>{comm.name}</h3>
                                         <p>{comm.description}</p>

@@ -25,7 +25,7 @@ const mapMensaje = (m) => ({
     send_by_me: m.send_by_me,
     created_at: m.fecha,
     is_read: m.leido,
-    sender_name: undefined
+    sender_name: m.sender_name || undefined
 });
 
 const buildChat = (contacto, mensajes) => ({
