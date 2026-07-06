@@ -38,8 +38,15 @@ export const AuthProvider = ({ children }) => {
         setUser(null)
     }
 
+    // Actualiza los datos del usuario en sesión (ej: tras editar el perfil).
+    const actualizarUsuario = (userData) => {
+        const merged = { ...user, ...userData }
+        localStorage.setItem('chat_user', JSON.stringify(merged))
+        setUser(merged)
+    }
+
     return (
-        <AuthContext.Provider value={{ user, login, register, loginInvitado, logout }}>
+        <AuthContext.Provider value={{ user, login, register, loginInvitado, logout, actualizarUsuario }}>
             {children}
         </AuthContext.Provider>
     )

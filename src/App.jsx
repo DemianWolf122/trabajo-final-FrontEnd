@@ -5,6 +5,7 @@ import ContactScreen from './Screens/ContactScreen.jsx'
 import ErrorNotFoundScreen from './Screens/ErrorNotFoundScreen.jsx'
 import LoginScreen from './Screens/LoginScreen.jsx'
 import RegisterScreen from './Screens/RegisterScreen.jsx'
+import ConfigScreen from './Screens/ConfigScreen.jsx'
 import ContactSidebar from './Components/ContactSidebar.jsx'
 import ContactsContextProvider from './Context/ContactsContext.jsx'
 import { useAuth } from './Context/AuthContext.jsx'
@@ -15,7 +16,8 @@ function App() {
   const location = useLocation()
   const [isBooting, setIsBooting] = useState(Boolean(localStorage.getItem('chat_user')))
 
-  const isChatActive = location.pathname.includes('/contact/')
+  // En mobile, tanto un chat como la config ocupan la pantalla completa.
+  const isChatActive = location.pathname.includes('/contact/') || location.pathname.includes('/config')
 
   // Pantalla de carga breve al iniciar sesión o refrescar con sesión activa.
   useEffect(() => {
@@ -56,6 +58,7 @@ function App() {
           <Routes>
             <Route path='/' element={<HomeScreen />} />
             <Route path='/contact/:contact_id' element={<ContactScreen />} />
+            <Route path='/config' element={<ConfigScreen />} />
             <Route path='*' element={<ErrorNotFoundScreen />} />
           </Routes>
         </div>

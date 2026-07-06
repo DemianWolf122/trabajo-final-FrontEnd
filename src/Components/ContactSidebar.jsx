@@ -1,13 +1,18 @@
 import React, { useContext, useState } from 'react'
 import { ContactsContext } from '../Context/ContactsContext.jsx'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 export default function ContactSidebar({ user, onLogout }) {
-    const { chats, communities, activeTab, setActiveTab, crearContacto } = useContext(ContactsContext)
+    const navigate = useNavigate()
+    const { chats, communities, activeTab, setActiveTab, crearContacto, crearComunidad, borrarComunidad } = useContext(ContactsContext)
     const [searchTerm, setSearchTerm] = useState('')
     const [showMenu, setShowMenu] = useState(false)
     const [showNewForm, setShowNewForm] = useState(false)
     const [nuevoNombre, setNuevoNombre] = useState('')
+    // Comunidades
+    const [showNewCom, setShowNewCom] = useState(false)
+    const [comNombre, setComNombre] = useState('')
+    const [comDesc, setComDesc] = useState('')
 
     const term = searchTerm.toLowerCase()
     const filteredChats = chats.filter(chat => chat.name.toLowerCase().includes(term))
@@ -15,12 +20,27 @@ export default function ContactSidebar({ user, onLogout }) {
         comm.name.toLowerCase().includes(term) || comm.description.toLowerCase().includes(term)
     )
 
-    const handleCrear = async (e) => {
+    const handleCrearContacto = async (e) => {
         e.preventDefault()
-        if (nuevoNombre.trim() === '') return
+        if (nuevoNombre.trim().length < 2) return
         await crearContacto(nuevoNombre.trim())
         setNuevoNombre('')
         setShowNewForm(false)
+    }
+
+    const handleCrearComunidad = async (e) => {
+        e.preventDefault()
+        if (comNombre.trim().length < 2) return
+        await crearComunidad(comNombre.trim(), comDesc.trim())
+        setComNombre('')
+        setComDesc('')
+        setShowNewCom(false)
+    }
+
+    const handleBorrarComunidad = async (e, id) => {
+        e.preventDefault()
+        e.stopPropagation()
+        if (window.confirm('¿Eliminar esta comunidad?')) await borrarComunidad(id)
     }
 
     return (
@@ -43,7 +63,9 @@ export default function ContactSidebar({ user, onLogout }) {
                         </button>
                         {showMenu && (
                             <div className="dropdown-menu fade-in">
-                                <button onClick={() => { setShowNewForm(true); setShowMenu(false) }}>Nuevo contacto</button>
+                                <button onClick={() => { setShowNewForm(true); setActiveTab('chats'); setShowMenu(false) }}>Nuevo contacto</button>
+                                <button onClick={() => { setShowNewCom(true); setActiveTab('communities'); setShowMenu(false) }}>Nueva comunidad</button>
+                                <button onClick={() => { navigate('/config'); setShowMenu(false) }}>Mi perfil</button>
                                 <button onClick={onLogout}>Cerrar sesión</button>
                             </div>
                         )}
@@ -51,9 +73,9 @@ export default function ContactSidebar({ user, onLogout }) {
                 </div>
             </header>
 
-            {showNewForm && (
-                <form className="new-contact-form fade-in" onSubmit={handleCrear}>
-                    <input autoFocus type="text" placeholder="Nombre del nuevo contacto" value={nuevoNombre} onChange={(e) => setNuevoNombre(e.target.value)} />
+            {showNewForm && activeTab === 'chats' && (
+                <form className="new-contact-form fade-in" onSubmit={handleCrearContacto}>
+                    <input autoFocus type="text" placeholder="Nombre del nuevo contacto" value={nuevoNombre} onChange={(e) => setNuevoNombre(e.target.value)} maxLength={50} />
                     <button type="submit">Agregar</button>
                 </form>
             )}
@@ -90,23 +112,49 @@ export default function ContactSidebar({ user, onLogout }) {
                     <p className="empty-list-msg">No hay contactos todavía.<br />Tocá el ícono ✚ para agregar uno.</p>
                 )}
 
-                {activeTab === 'communities' && filteredCommunities.map(comm => (
-                    <div key={comm.id} className="community-item slide-in-left">
-                        <div className="comm-header">
-                            <img src={comm.icon} alt={comm.name} />
-                            <div>
-                                <h3>{comm.name}</h3>
-                                <p>{comm.description}</p>
-                            </div>
+                {activeTab === 'communities' && (
+                    <>
+                        <div className="community-toolbar">
+                            <button className="new-community-btn" onClick={() => setShowNewCom(!showNewCom)}>
+                                ＋ Nueva comunidad
+                            </button>
                         </div>
-                        {comm.groups.map(group => (
-                            <div key={group.id} className="comm-group">
-                                <span># {group.name}</span>
-                                {group.unread > 0 && <span className="unread-badge">{group.unread}</span>}
+
+                        {showNewCom && (
+                            <form className="new-community-form fade-in" onSubmit={handleCrearComunidad}>
+                                <input autoFocus type="text" placeholder="Nombre de la comunidad" value={comNombre} onChange={(e) => setComNombre(e.target.value)} maxLength={60} />
+                                <input type="text" placeholder="Descripción (opcional)" value={comDesc} onChange={(e) => setComDesc(e.target.value)} maxLength={200} />
+                                <div className="form-actions">
+                                    <button type="submit" disabled={comNombre.trim().length < 2}>Crear</button>
+                                    <button type="button" className="btn-cancel" onClick={() => setShowNewCom(false)}>Cancelar</button>
+                                </div>
+                            </form>
+                        )}
+
+                        {filteredCommunities.length === 0 && !showNewCom && (
+                            <p className="empty-list-msg">No hay comunidades todavía.<br />Creá la primera con “＋ Nueva comunidad”.</p>
+                        )}
+
+                        {filteredCommunities.map(comm => (
+                            <div key={comm.id} className="community-item slide-in-left">
+                                <div className="comm-header">
+                                    <img src={comm.icon} alt={comm.name} />
+                                    <div className="comm-header-text">
+                                        <h3>{comm.name}</h3>
+                                        <p>{comm.description}</p>
+                                    </div>
+                                    <button className="comm-delete-btn" title="Eliminar comunidad" onClick={(e) => handleBorrarComunidad(e, comm.id)}>✕</button>
+                                </div>
+                                {comm.groups.map(group => (
+                                    <div key={group.id} className="comm-group">
+                                        <span># {group.name}</span>
+                                        {group.unread > 0 && <span className="unread-badge">{group.unread}</span>}
+                                    </div>
+                                ))}
                             </div>
                         ))}
-                    </div>
-                ))}
+                    </>
+                )}
             </div>
         </div>
     )

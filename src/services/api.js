@@ -39,7 +39,17 @@ const api = {
     // --- Mensajes ---
     getMensajes: (contactoId) => request(`/mensajes?contactoId=${contactoId}`),
     enviarMensaje: (data) => request('/mensajes', { method: 'POST', body: data }),
-    vaciarChat: (contactoId) => request(`/mensajes/vaciar/${contactoId}`, { method: 'DELETE' })
+    vaciarChat: (contactoId) => request(`/mensajes/vaciar/${contactoId}`, { method: 'DELETE' }),
+
+    // --- Comunidades ---
+    getComunidades: () => request('/comunidades'),
+    crearComunidad: (data) => request('/comunidades', { method: 'POST', body: data }),
+    editarComunidad: (id, data) => request(`/comunidades/${id}`, { method: 'PUT', body: data }),
+    borrarComunidad: (id) => request(`/comunidades/${id}`, { method: 'DELETE' }),
+
+    // --- Perfil ---
+    getPerfil: () => request('/auth/me'),
+    editarPerfil: (data) => request('/auth/me', { method: 'PUT', body: data })
 }
 
 export default api

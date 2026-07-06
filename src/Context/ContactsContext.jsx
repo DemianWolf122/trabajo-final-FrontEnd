@@ -4,20 +4,14 @@ import { useAuth } from "./AuthContext";
 
 export const ContactsContext = createContext();
 
-// Comunidades: función extra (no forma parte del CRUD de la API), se deja estática.
-const COMMUNITIES = [
-    {
-        id: 101,
-        name: 'UTN Programación Web',
-        description: 'Comunidad oficial de alumnos de la UTN. Avisos, dudas y proyectos.',
-        icon: 'https://ui-avatars.com/api/?name=UTN&background=0055A4&color=fff&rounded=true',
-        groups: [
-            { id: 201, name: 'Avisos Oficiales', unread: 2 },
-            { id: 202, name: 'Dudas Front-End (Martes/Jueves)', unread: 15 },
-            { id: 203, name: 'Off-topic / Memes', unread: 0 }
-        ]
-    }
-];
+// Adaptamos una comunidad de la API a la forma que usa el sidebar.
+const mapComunidad = (c) => ({
+    id: c._id,
+    name: c.nombre,
+    description: c.descripcion || '',
+    icon: c.icon || `https://ui-avatars.com/api/?name=${encodeURIComponent(c.nombre)}&background=0055A4&color=fff&rounded=true`,
+    groups: (c.groups || []).map(g => ({ id: g._id, name: g.nombre, unread: g.unread || 0 }))
+});
 
 const AUTO_REPLIES = [
     '¡Genial! 🙌', 'Jaja tal cual', 'Dale, lo vemos 👀', 'Buenísimo, gracias por avisar',
@@ -49,7 +43,7 @@ const buildChat = (contacto, mensajes) => ({
 const ContactsContextProvider = ({ children }) => {
     const { user } = useAuth();
     const [chatsState, setChatsState] = useState([]);
-    const [communitiesState] = useState(COMMUNITIES);
+    const [communitiesState, setCommunitiesState] = useState([]);
     const [activeTab, setActiveTab] = useState('chats');
     const [cargando, setCargando] = useState(false);
 
@@ -57,15 +51,19 @@ const ContactsContextProvider = ({ children }) => {
         if (!localStorage.getItem('chat_token')) return;
         setCargando(true);
         try {
-            const res = await api.getContactos();
-            const contactos = res.data.contactos;
+            const [resContactos, resComunidades] = await Promise.all([
+                api.getContactos(),
+                api.getComunidades()
+            ]);
+            const contactos = resContactos.data.contactos;
             const chats = await Promise.all(contactos.map(async (c) => {
                 const mres = await api.getMensajes(c._id);
                 return buildChat(c, mres.data.mensajes);
             }));
             setChatsState(chats);
+            setCommunitiesState(resComunidades.data.comunidades.map(mapComunidad));
         } catch (error) {
-            console.error('Error cargando contactos:', error.message);
+            console.error('Error cargando datos:', error.message);
         } finally {
             setCargando(false);
         }
@@ -73,7 +71,7 @@ const ContactsContextProvider = ({ children }) => {
 
     useEffect(() => {
         if (user) refrescar();
-        else setChatsState([]);
+        else { setChatsState([]); setCommunitiesState([]); }
     }, [user]);
 
     const sendMessage = async (contactId, text) => {
@@ -147,6 +145,17 @@ const ContactsContextProvider = ({ children }) => {
         setChatsState(prev => prev.filter(chat => chat.id !== contactId));
     };
 
+    const crearComunidad = async (nombre, descripcion) => {
+        const res = await api.crearComunidad({ nombre, descripcion: descripcion || '' });
+        setCommunitiesState(prev => [...prev, mapComunidad(res.data.comunidad)]);
+        return res.data.comunidad;
+    };
+
+    const borrarComunidad = async (comunidadId) => {
+        await api.borrarComunidad(comunidadId);
+        setCommunitiesState(prev => prev.filter(c => c.id !== comunidadId));
+    };
+
     const contextValue = {
         chats: chatsState,
         communities: communitiesState,
@@ -160,7 +169,9 @@ const ContactsContextProvider = ({ children }) => {
         markAsRead,
         crearContacto,
         editarContacto,
-        borrarContacto
+        borrarContacto,
+        crearComunidad,
+        borrarComunidad
     };
 
     return (
