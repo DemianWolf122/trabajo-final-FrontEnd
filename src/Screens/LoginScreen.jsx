@@ -8,7 +8,7 @@ export default function LoginScreen() {
     const [verPass, setVerPass] = useState(false);
     const [error, setError] = useState('');
     const [cargando, setCargando] = useState(false);
-    const { login, loginInvitado } = useAuth();
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -17,19 +17,6 @@ export default function LoginScreen() {
         setCargando(true);
         try {
             await login(email, password);
-            navigate('/');
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setCargando(false);
-        }
-    };
-
-    const handleInvitado = async () => {
-        setError('');
-        setCargando(true);
-        try {
-            await loginInvitado();
             navigate('/');
         } catch (err) {
             setError(err.message);
@@ -65,9 +52,6 @@ export default function LoginScreen() {
                         {error && <p className="login-error">{error}</p>}
                         <button type="submit" disabled={cargando}>{cargando ? 'Ingresando...' : 'Entrar al Chat'}</button>
                     </form>
-                    <button type="button" className="login-guest-btn" onClick={handleInvitado} disabled={cargando}>
-                        Entrar como invitado
-                    </button>
                     <p className="login-switch">¿No tenés cuenta? <Link to="/register">Registrate</Link></p>
                 </div>
             </div>
