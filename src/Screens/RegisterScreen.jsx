@@ -10,7 +10,7 @@ export default function RegisterScreen() {
     const [error, setError] = useState('');
     const [cargando, setCargando] = useState(false);
     const [registrado, setRegistrado] = useState(null);
-    const { register, loginInvitado } = useAuth();
+    const { register } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -20,19 +20,6 @@ export default function RegisterScreen() {
         try {
             const usuario = await register(nombre, email, password);
             setRegistrado(usuario);
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setCargando(false);
-        }
-    };
-
-    const handleInvitado = async () => {
-        setError('');
-        setCargando(true);
-        try {
-            await loginInvitado();
-            navigate('/');
         } catch (err) {
             setError(err.message);
         } finally {
@@ -81,9 +68,6 @@ export default function RegisterScreen() {
                                 {error && <p className="login-error">{error}</p>}
                                 <button type="submit" disabled={cargando}>{cargando ? 'Creando...' : 'Registrarme'}</button>
                             </form>
-                            <button type="button" className="login-guest-btn" onClick={handleInvitado} disabled={cargando}>
-                                Entrar como invitado
-                            </button>
                             <p className="login-switch">¿Ya tenés cuenta? <Link to="/">Iniciá sesión</Link></p>
                         </>
                     )}
