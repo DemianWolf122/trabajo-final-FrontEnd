@@ -212,7 +212,7 @@ body {
     padding-right: 46px;
 }
 
-/* Especificidad alta para ganarle a la regla genérica .login-card button */
+/* El ojito: solo el icono, sin fondo ni borde */
 .login-card .password-toggle {
     position: absolute;
     right: 12px;
