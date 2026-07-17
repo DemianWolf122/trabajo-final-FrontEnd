@@ -26,12 +26,6 @@ export const AuthProvider = ({ children }) => {
         return res.data.user
     }
 
-    const loginInvitado = async () => {
-        const res = await api.guest()
-        guardarSesion(res.data.token, res.data.user)
-        return res.data.user
-    }
-
     const logout = () => {
         localStorage.removeItem('chat_token')
         localStorage.removeItem('chat_user')
@@ -46,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user, login, register, loginInvitado, logout, actualizarUsuario }}>
+        <AuthContext.Provider value={{ user, login, register, logout, actualizarUsuario }}>
             {children}
         </AuthContext.Provider>
     )

@@ -125,6 +125,8 @@ const ContactsContextProvider = ({ children }) => {
 
     const markAsRead = (contactId) => {
         setChatsState(prev => prev.map(chat => chat.id === contactId ? { ...chat, unread_count: 0 } : chat));
+        // Tambien lo guardamos en la base, para que no vuelva a aparecer como no leido.
+        api.marcarLeidos(contactId).catch(() => {});
     };
 
     const crearContacto = async (nombre, profile_picture) => {

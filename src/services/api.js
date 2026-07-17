@@ -37,8 +37,6 @@ const api = {
         request('/auth/register', { method: 'POST', auth: false, body: { nombre, email, password } }),
     login: (email, password) =>
         request('/auth/login', { method: 'POST', auth: false, body: { email, password } }),
-    guest: () =>
-        request('/auth/guest', { method: 'POST', auth: false }),
 
     // --- Contactos ---
     getContactos: () => request('/contactos'),
@@ -49,12 +47,12 @@ const api = {
     // --- Mensajes ---
     getMensajes: (contactoId) => request(`/mensajes?contactoId=${contactoId}`),
     enviarMensaje: (data) => request('/mensajes', { method: 'POST', body: data }),
+    marcarLeidos: (contactoId) => request(`/mensajes/leer/${contactoId}`, { method: 'PUT' }),
     vaciarChat: (contactoId) => request(`/mensajes/vaciar/${contactoId}`, { method: 'DELETE' }),
 
     // --- Comunidades ---
     getComunidades: () => request('/comunidades'),
     crearComunidad: (data) => request('/comunidades', { method: 'POST', body: data }),
-    editarComunidad: (id, data) => request(`/comunidades/${id}`, { method: 'PUT', body: data }),
     borrarComunidad: (id) => request(`/comunidades/${id}`, { method: 'DELETE' }),
 
     // --- Perfil ---

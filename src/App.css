@@ -934,23 +934,6 @@ body {
     text-align: center;
 }
 
-.login-guest-btn {
-    margin-top: 12px;
-    background-color: #fff !important;
-    color: var(--wp-green) !important;
-    border: 1px solid var(--wp-green) !important;
-    padding: 13px;
-    border-radius: 24px;
-    cursor: pointer;
-    width: 100%;
-    max-width: 300px;
-    transition: all 0.2s;
-}
-
-.login-guest-btn:hover {
-    background-color: #f0fdf9 !important;
-}
-
 .login-switch {
     margin-top: 18px;
     font-size: 14px;
